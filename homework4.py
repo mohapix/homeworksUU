@@ -1,7 +1,6 @@
-immutable_var = (1, "string", True, [100, True])
-print(immutable_var)
-# immutable_var[2] = False  // нельзя (изменение элемента кортежа)
-# immutable_var[3][1] = False  // можно (изменения элемента списка внутри кортежа)
-mutable_list = [1, "string", False]
-mutable_list[0] = mutable_list[0] + immutable_var[3][0]
-print(mutable_list)
+def print_params(param_to_print):
+    print("Параметр1:", param_to_print)
+    print("Параметр2:", param_to_print)
+
+
+print_params(input("Введите параметр: "))
