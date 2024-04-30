@@ -1,7 +1,13 @@
-string = "это моя строка"
-print(string[0])
-print(string[-1])
-print(string[2:5])
-print(string[::-1])
-print(len(string))
-print("это новая строка " + string)
+def test():
+    a = False
+    b = 100
+    print(a, b, "- function 'test' local print")
+
+
+def test2(a, b=True, c=150):
+    print(a, b, c, "- function 'test2' local print")
+
+
+test()
+print()
+test2([True, "LIST"], 200, c="String")
