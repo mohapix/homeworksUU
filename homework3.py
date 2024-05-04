@@ -1,7 +1,17 @@
-my_string = input("Введите данные: ")
-print(len(my_string))
-print(my_string.upper())
-print(my_string.lower())
-my_string = my_string.replace(" ", "")
-print(my_string[0])
-print(my_string[-1])
+def test(a=10, b='String', c=True):
+    print(a, b, c)
+    return
+
+
+test()
+print()
+
+
+def faktorial(n):
+    if n == 1:
+        return 1
+    return n * faktorial(n - 1)
+
+
+num = int(input("Задайте число: "))
+print("Факториал заданного числа:", faktorial(num))
