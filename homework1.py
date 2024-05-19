@@ -1,13 +1,17 @@
-def test():
-    a = False
-    b = 100
-    print(a, b, "- function 'test' local print")
+from Module2 import module2hard as mh2
+from Module3 import module3hard as mh3
 
 
-def test2(a, b=True, c=150):
-    print(a, b, c, "- function 'test2' local print")
+def say_hi():
+    print("Hello, world")
 
 
-test()
-print()
-test2([True, "LIST"], 200, c="String")
+def say_hello():
+    print("Hello, world")
+
+
+say_hi()
+print(mh2.pairs_generator(15))
+
+say_hello()
+print(mh3.calculate_structure_sum([1, 2, 3]))
