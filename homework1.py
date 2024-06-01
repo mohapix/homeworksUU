@@ -1,17 +1,22 @@
-from Module2 import module2hard as mh2
-from Module3 import module3hard as mh3
+class House:
+
+    def __init__(self, name, floors):
+        self.name = name
+        self.number_of_floors = floors
+
+    def go_to(self, new_floor):
+        if new_floor < 1 or new_floor > self.number_of_floors:
+            print('Такого этажа не существует')
+            return
+        n = 1
+        while n <= new_floor:
+            print(n)
+            n += 1
 
 
-def say_hi():
-    print("Hello, world")
-
-
-def say_hello():
-    print("Hello, world")
-
-
-say_hi()
-print(mh2.pairs_generator(15))
-
-say_hello()
-print(mh3.calculate_structure_sum([1, 2, 3]))
+# elbrus = House('ЖК Эльбрус', 30)
+# elbrus.go_to(int(input('Введите этаж: ')))
+h1 = House('ЖК Горский', 18)
+h2 = House('Домик в деревне', 2)
+h1.go_to(5)
+h2.go_to(10)
