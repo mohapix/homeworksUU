@@ -1,11 +1,12 @@
-def test_function():
-    def inner_function():
-        print("Я в области видимости функции test_function")
+class House:
 
-    inner_function()
+    def __init__(self):
+        self.numberOfFloors = 0
+
+    def setNewNumberOfFloors(self, floors):
+        self.numberOfFloors += floors
+        print(self.numberOfFloors)
 
 
-try:
-    inner_function()
-except NameError:
-    print("Функция не объявлена")
+my_house = House()
+my_house.setNewNumberOfFloors(4)
