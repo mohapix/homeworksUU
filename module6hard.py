@@ -26,10 +26,6 @@ class Figure:
         elif not self.__sides:
             while len(self.__sides) < self.sides_count:
                 self.__sides.append(1)
-        # if isinstance(self, Circle):
-        #     self._set_radius()
-        # elif isinstance(self, Triangle):
-        #     self._set_height()
 
     def __is_valid_sides(self, *args):
         if len(args) != self.sides_count:
