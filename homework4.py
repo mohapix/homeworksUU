@@ -1,7 +1,35 @@
-immutable_var = (1, "string", True, [100, True])
-print(immutable_var)
-# immutable_var[2] = False  // нельзя (изменение элемента кортежа)
-# immutable_var[3][1] = False  // можно (изменения элемента списка внутри кортежа)
-mutable_list = [1, "string", False]
-mutable_list[0] = mutable_list[0] + immutable_var[3][0]
-print(mutable_list)
+# -*- coding: utf-8 -*-
+
+# for root, dirs, files in os.walk(directory):
+#   for file in files:
+#     filepath = ?
+#     filetime = ?
+#     formatted_time = time.strftime("%d.%m.%Y %H:%M", time.localtime(filetime))
+#     filesize = ?
+#     parent_dir = ?
+#     print(f'Обнаружен файл: {file}, Путь: {filepath}, Размер: {filesize} байт,
+#     Время изменения: {formatted_time}, Родительская директория: {parent_dir}')
+#
+# Пример решения:
+#
+# Обнаружен файл: main.py, Путь: ./main.py, Размер: 111 байт,
+# Время изменения: 11.11.1111 11:11, Родительская директория: .
+# Пример кода:
+# https://onlinegdb.com/j1Euu7cvQ
+
+import os
+import time
+
+# directory = 'D:/PycharmProjects/homeworks/Module7/'
+# directory = os.path.normpath(directory)
+directory = os.path.dirname(__file__)
+
+for root, dirs, files in os.walk(directory):
+    for file in files:
+        filepath = os.path.join(root, file)
+        filetime = os.path.getmtime(filepath)
+        formatted_time = time.strftime("%d.%m.%Y %H:%M:%S", time.localtime(filetime))
+        filesize = os.path.getsize(filepath)
+        parent_dir = os.path.dirname(filepath)
+        print(f'Обнаружен файл: {file}, Путь: {filepath}, Размер: {filesize} байт, '
+              f'Время изменения: {formatted_time}, Родительская директория: {parent_dir}')
