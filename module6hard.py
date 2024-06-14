@@ -32,10 +32,9 @@ class Figure:
             self._set_height()
 
     def __is_valid_sides(self, *args):
-        sides = [*args]
-        if len(sides) != self.sides_count:
+        if len(args) != self.sides_count:
             return False
-        for side in sides:
+        for side in args:
             if not isinstance(side, int) or side <= 0:
                 return False
         return True
@@ -92,8 +91,8 @@ class Cube(Figure):
     def set_sides(self, *args):
         sides = []
         if len(args) == 1:
-            while len(sides) < self.sides_count:
-                sides.append(*args)
+            sides.append(*args)
+            sides *= self.sides_count
         super().set_sides(*sides)
 
     def get_volume(self):
