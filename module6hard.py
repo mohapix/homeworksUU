@@ -52,15 +52,15 @@ class Circle(Figure):
 
     def __init__(self, rgb, *args):
         super().__init__()
-        self.__radius = 0
+        self.__radius = 0.0
         self.set_sides(*args)
         self.set_color(*rgb)
 
     def _set_radius(self):
-        self.__radius = round(self.get_sides()[0] / pi / 2, 2)
+        self.__radius = self.get_sides()[0] / pi / 2
 
     def get_square(self):
-        return round(self.__radius ** 2 * pi, 2)
+        return round(self.__radius ** 2 * pi, 6)
 
 
 class Triangle(Figure):
@@ -68,7 +68,7 @@ class Triangle(Figure):
 
     def __init__(self, rgb, *args):
         super().__init__()
-        self.__height = 0
+        self.__height = 0.0
         self.set_sides(*args)
         self.set_color(*rgb)
 
@@ -78,7 +78,7 @@ class Triangle(Figure):
     def get_square(self):
         p = len(self) / 2
         a, b, c = self.get_sides()
-        return round(sqrt(p * (p - a) * (p - b) * (p - c)), 2)
+        return round(sqrt(p * (p - a) * (p - b) * (p - c)), 6)
 
 
 class Cube(Figure):
