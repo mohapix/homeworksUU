@@ -26,10 +26,10 @@ class Figure:
         elif not self.__sides:
             while len(self.__sides) < self.sides_count:
                 self.__sides.append(1)
-        if isinstance(self, Circle):
-            self._set_radius()
-        elif isinstance(self, Triangle):
-            self._set_height()
+        # if isinstance(self, Circle):
+        #     self._set_radius()
+        # elif isinstance(self, Triangle):
+        #     self._set_height()
 
     def __is_valid_sides(self, *args):
         if len(args) != self.sides_count:
@@ -55,8 +55,12 @@ class Circle(Figure):
         self.set_sides(*args)
         self.set_color(*rgb)
 
-    def _set_radius(self):
+    def __set_radius(self):
         self.__radius = self.get_sides()[0] / pi / 2
+
+    def set_sides(self, *args):
+        super().set_sides(*args)
+        self.__set_radius()
 
     def get_square(self):
         return round(self.__radius ** 2 * pi, 6)
@@ -71,8 +75,12 @@ class Triangle(Figure):
         self.set_sides(*args)
         self.set_color(*rgb)
 
-    def _set_height(self):
+    def __set_height(self):
         self.__height = 2 * self.get_square() / self.get_sides()[2]
+
+    def set_sides(self, *args):
+        super().set_sides(*args)
+        self.__set_height()
 
     def get_square(self):
         p = len(self) / 2
