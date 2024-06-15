@@ -9,14 +9,13 @@ class File:
     def __init__(self, filename, dirname=None):
         self.filename = filename
         self.dirname, self.filepath = self.__get_full_path(filename, dirname)
+        self.filesize = self.__get_filesize(self.filepath)
 
     def __repr__(self):
-        return self.filepath
+        return self.filename
 
     def __eq__(self, other):
-        filesize_self = self.__get_filesize(self.filepath)
-        filesize_other = self.__get_filesize(other.filepath)
-        return self.filepath == other.filepath and filesize_self == filesize_other
+        return self.filepath == other.filepath and self.filesize == other.filesize
 
     @staticmethod
     def __get_filesize(filepath):
@@ -56,24 +55,35 @@ class Chatterer:
 
         zfile = zipfile.ZipFile(zip_filename)
         files_unzipped = []
-        for file in zfile.namelist():
-            if zfile.extract(file):
-                new_file = File(file, zip_dirname)
-                files_unzipped.append(file)
+        for filename in zfile.namelist():
+            if zfile.extract(filename):
+                new_file = File(filename, zip_dirname)
+                files_unzipped.append(filename)
                 if new_file not in self.filenames:
                     self.filenames.append(new_file)
         return files_unzipped
 
-    def seek(self, key_word='', dirname=None):
+    @staticmethod
+    def __exceptions_check(exceptions, filename):
+        for item in exceptions:
+            if item in filename:
+                return True
+        return False
+
+    def seek(self, key_word='', exceptions=None, dirname=None):
         if not dirname:
             dirname = os.path.dirname(__file__)
+        if exceptions and not isinstance(exceptions, list):
+            exceptions = [exceptions]
 
         files_found = []
         for root, dirs, files in os.walk(dirname):
-            for file in files:
-                if file.endswith('.txt') and key_word in file:
-                    new_file = File(file, root)
-                    files_found.append(file)
+            for filename in files:
+                if filename.endswith('.txt') and key_word in filename:
+                    if exceptions and self.__exceptions_check(exceptions, filename):
+                        continue
+                    new_file = File(filename, root)
+                    files_found.append(filename)
                     if new_file not in self.filenames:
                         self.filenames.append(new_file)
         return files_found
@@ -97,9 +107,9 @@ class Chatterer:
                     unzipped += self.__unzip(filenames[i], dirname)
                     filenames.pop(i)
 
-            for file in unzipped:
-                if file not in filenames:
-                    filenames.append(file)
+            for filename in unzipped:
+                if filename not in filenames:
+                    filenames.append(filename)
 
         collection_changed = False
         char_seq = ' ' * self.analyze_count
@@ -108,8 +118,8 @@ class Chatterer:
                 filename = File(filename, dirname)
 
             if filename not in self.files_collected:
-                with open(filename.filepath, mode='r', encoding='cp1251') as file:
-                    for line in file:
+                with open(filename.filepath, mode='r', encoding='cp1251') as file_in:
+                    for line in file_in:
                         line = line[:-1]
                         for char in line:
                             if char_seq in self.__stats:
@@ -144,9 +154,11 @@ class Chatterer:
         chat_n = n
         printed = 0
         if out_filename is not None:
-            file = open(out_filename, mode='w', encoding='utf8')
+            file_out = open(out_filename, mode='w', encoding='utf8')
+            file_out.write('# -*- coding: utf-8 -*-\n')
+            file_out.write(f'Текст сгенерирован на основе словаря, содержащего {len(self)} записей.\n\n')
         else:
-            file = None
+            file_out = None
 
         char_seq = ' ' * self.analyze_count
         spaces_printed = 0
@@ -161,38 +173,38 @@ class Chatterer:
                 if dice <= count:
                     char = char_
                     break
-            if file:
-                file.write(char)
+            if file_out:
+                file_out.write(char)
             else:
                 print(char, end='')
             if char == ' ':
                 spaces_printed += 1
                 if spaces_printed >= 10:
-                    if file:
-                        file.write('\n')
+                    if file_out:
+                        file_out.write('\n')
                     else:
                         print()
                     spaces_printed = 0
             printed += 1
             char_seq = char_seq[1:] + char
-        if file:
-            file.close()
+        if file_out:
+            file_out.close()
         else:
             print()
 
 
 if __name__ == '__main__':
     chatter = Chatterer()
-    chatter.seek(key_word='voyna-i-mir')
+    files_txt = chatter.seek(key_word='voyna-i-mir')
     chatter.collect()
-    chatter.collect(['voyna-i-mir-tom-3.txt', 'voyna-i-mir-tom-1.txt'])
+    chatter.collect(files_txt)
     chatter.collect('voyna-i-mir-tom-2.txt')
     chatter.collect('voyna-i-mir.zip')
-    print(len(chatter))
+    # print(len(chatter))
 
-    chatter.seek()
+    chatter.seek(exceptions='out')
     chatter.collect()
-    chatter.chat(n=1000, out_filename='out.txt')
+    # print(len(chatter))
 
-    print(len(chatter))
+    chatter.chat(n=5000, out_filename='out.txt')
     # print(chatter.totals)
