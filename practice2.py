@@ -13,12 +13,6 @@ class File:
     def __repr__(self):
         return self.filepath
 
-    # def __contains__(self, items):
-    #     for item in items:
-    #         if self.__eq__(item):
-    #             return True
-    #     return False
-
     def __eq__(self, other):
         filesize_self = self.__get_filesize(self.filepath)
         filesize_other = self.__get_filesize(other.filepath)
