@@ -1,36 +1,45 @@
 # -*- coding: utf-8 -*-
+# длина окружности = 2 * радиус * Pi
 
-text_ =\
-    """# -*- coding: utf-8 -*-
-My soul is dark - Oh! quickly string
-The harp I yet can brook to hear;
-And let thy gentle fingers fling
-Its melting murmurs o'er mine ear.
-If in this heart a hope be dear,
-That sound shall charm it forth again:
-If in these eyes there lurk a tear,
-'Twill flow, and cease to burn my brain.
+class MyException(Exception):
 
-But bid the strain be wild and deep,
-Nor let thy notes of joy be first:
-I tell thee, minstrel, I must weep,
-Or else this heavy heart will burst;
-For it hath been by sorrow nursed,
-And ached in sleepless silence, long;
-And now 'tis doomed to know the worst,
-And break at once - or yield to song."""
+    def __init__(self, name, message, info=None):
+        self.name = name
+        self.message = message
+        self.info = info
 
-filename = 'homework2.txt'
-file = open(filename, mode='w', encoding='utf8')
-file.write(text_)
-file.close()
 
-with open(filename, mode='r', encoding='utf8') as file:
-    print('----- reading file: {} -----'.format(file.name))
-    for line in file:
-        print(line, end='')
-    print('\n------- end of file -------')
-print('Is file closed?', file.closed)
+def get_pi():
+    count = 0
 
-# Оператор with работает с файлом, как с объектом, используя служебный метод __enter__ при входе
-# и служебный метод __exit__ при выходе, закрывая файл по окончанию работы вложенного кода.
+    def pi(x, action):
+        nonlocal count
+        if count == 100:
+            raise MyException('ProcessingError', 'устал считать Пи', f'остановился на делителе {x}')
+        if action == '+':
+            count += 1
+            return 1 / x + pi(x + 2, '-')
+        elif action == '-':
+            count += 1
+            return 1 / x - pi(x + 2, '+')
+
+    return 4 * pi(1, '-')
+
+
+def get_radius():
+    user_input = input('Введите радиус окружности: ')
+    if not user_input.isnumeric():
+        raise MyException('InvalidDataError', 'введены неверные данные', f'введено "{user_input}"')
+    else:
+        return int(user_input)
+
+
+def circle_len():
+    return 2 * get_radius() * get_pi()
+
+
+try:
+    result = circle_len()
+    print(result)
+except MyException as exc:
+    print(f'Ошибка: {exc.name} - {exc.message}, дополнительная информация: {exc.info}')
