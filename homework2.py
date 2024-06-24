@@ -52,7 +52,7 @@ class Rect:
         self.side_b = b
 
     def __call__(self):
-        return f'Площадь: {self.side_a * self.side_b}'
+        return self.side_a * self.side_b
 
     def __repr__(self):
         return f'Стороны: {self.side_a}, {self.side_b}'
@@ -60,4 +60,4 @@ class Rect:
 
 my_rect = Rect(2, 4)
 print(my_rect)
-print(my_rect())
+print(f'Площадь: {my_rect()}')
