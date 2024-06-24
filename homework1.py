@@ -1,12 +1,11 @@
-# -*- coding: utf-8 -*-
-
-def add_everything_up(a, b):
-    try:
-        return a + b
-    except TypeError:
-        return str(a) + str(b)
+def num_multiplier(num):
+    return num ** 2
 
 
-print(add_everything_up(123.456, 'строка'))
-print(add_everything_up('яблоко', 4215))
-print(add_everything_up(123.456, 7))
+def odd_check(num):
+    return num % 2
+
+
+list_ = [1, 2, 5, 7, 12, 11, 35, 4, 89, 10]
+list_2 = list(map(num_multiplier, filter(odd_check, list_)))
+print(list_2)
