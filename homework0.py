@@ -1,7 +1,11 @@
-string1 = "это моя строка"
-print(string1[0])
-print(string1[-1])
-print(string1[2:5])
-print(string1[::-1])
-print(len(string1))
-print("это новая строка " + string1)
+# -*- coding: utf-8 -*-
+
+def apply_all_func(int_list, *functions):
+    reuslts = {}
+    for func in functions:
+        reuslts[func.__name__] = func(int_list)
+    return reuslts
+
+
+print(apply_all_func([6, 20, 15, 9], max, min))
+print(apply_all_func([6, 20, 15, 9], len, sum, sorted))
