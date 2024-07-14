@@ -9,10 +9,16 @@ abc
 
 
 def all_variants(text):
-    n = 0
-    while n <= 0:
+    n = 1
+    while n <= len(text):
+        res = ''
         for lit in text:
-            yield lit
+            res += lit
+            if len(res) > n:
+                res = lit
+            if len(res) == n:
+                yield res
+                res = lit
         n += 1
 
 
