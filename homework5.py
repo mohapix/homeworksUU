@@ -16,7 +16,8 @@ def all_variants(text):
             res += lit
             if len(res) > n:
                 res = lit
-            if len(res) == n:
+                yield res
+            elif len(res) == n:
                 yield res
                 res = lit
         n += 1
