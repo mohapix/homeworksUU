@@ -1,55 +1,40 @@
-from random import choice
-
-# Lambda-функция
-
-first = 'Мама мыла раму'
-second = 'Рамена мало было'
-
-my_func = lambda lit1, lit2: lit1 == lit2
-
-print(list(map(my_func, first, second)))
-"""
-[False, True, True, False, False, False, False, False, True, False, False, False, False, False]
-"""
+import threading
 
 
-# Замыкание
+class BankAccount:
+    LOCK = threading.Lock()
+
+    def __init__(self, balance):
+        self.balance = balance
+
+    def deposit(self, amount):
+        with BankAccount.LOCK:
+            self.balance += amount
+            print(f'Deposited {amount}, new balance is {self.balance}')
+
+    def withdraw(self, amount):
+        with BankAccount.LOCK:
+            self.balance -= amount
+            print(f'Withdrew {amount}, new balance is {self.balance}')
 
 
-def get_advanced_writer(file_name):
-
-    def write_everything(*data_set):
-        with open(file_name, mode='w') as file:
-            for line in data_set:
-                file.write(str(line) + '\n')
-
-    return write_everything
+def deposit_task(account, amount):
+    for _ in range(5):
+        account.deposit(amount)
 
 
-write = get_advanced_writer('example.txt')
-write('Это строчка', ['А', 'это', 'уже', 'число', 5, 'в', 'списке'])
-"""
-Это строчка
-['А', 'это', 'уже', 'число', 5, 'в', 'списке']
-"""
+def withdraw_task(account, amount):
+    for _ in range(5):
+        account.withdraw(amount)
 
 
-# Метод __call__
-class MysticBall:
+account = BankAccount(1000)
 
-    def __init__(self, *words):
-        self.words = words
+deposit_thread = threading.Thread(target=deposit_task, args=(account, 100))
+withdraw_thread = threading.Thread(target=withdraw_task, args=(account, 150))
 
-    def __call__(self):
-        return choice(self.words)
+deposit_thread.start()
+withdraw_thread.start()
 
-
-first_ball = MysticBall('Да', 'Нет', 'Наверное')
-print(first_ball())
-print(first_ball())
-print(first_ball())
-"""
-Нет
-Наверное
-Наверное
-"""
+deposit_thread.join()
+withdraw_thread.join()
