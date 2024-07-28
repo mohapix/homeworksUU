@@ -1,63 +1,45 @@
-# -*- coding: utf-8 -*-
-
-# Фабрика функций для сложения, вычитания, умножения и деления:
-def create_operation(operation):
-    if operation == "plus":
-        def plus(x, y):
-            return x + y
-        return plus
-    elif operation == "minus":
-        def minus(x, y):
-            return x - y
-        return minus
-    elif operation == "multiply":
-        def multiply(x, y):
-            return x * y
-        return multiply
-    elif operation == "divide":
-        def divide(x, y):
-            try:
-                result = x / y
-            except ZeroDivisionError:
-                return f'Error: Division by zero'
-            else:
-                return round(result, 2)
-        return divide
+from threading import Thread
+from time import sleep
 
 
-new_func_plus = create_operation('multiply')
-print(new_func_plus(2, 3))
+class Knight(Thread):
 
-new_func_divide = create_operation('divide')
-print(new_func_divide(18, 9))
-print(new_func_divide(20, 0))
+    def __init__(self, name: str, power: int):
+        super().__init__()
+        self.name = name
+        self.power = power
 
-
-# Лямбда функции с аналогом через def
-my_num_xx2 = lambda x: x ** 2
-print(my_num_xx2(4))
-
-
-def func_num_xx2(num):
-    return num ** 2
-
-
-print(func_num_xx2(4))
-
-
-# Создания вызываемого объекта
-class Rect:
-    def __init__(self, a, b):
-        self.side_a = a
-        self.side_b = b
-
-    def __call__(self):
-        return self.side_a * self.side_b
-
-    def __repr__(self):
-        return f'Стороны: {self.side_a}, {self.side_b}'
+    def run(self):
+        print(f'{self.name}, на нас напали!')
+        enemies_left = 100
+        days = 0
+        while enemies_left > 0:
+            sleep(1)
+            enemies_left -= self.power
+            days += 1
+            print(f'{self.name} сражается {days} {days_str(days)}, осталось {enemies_left} воинов.')
+        print(f'{self.name} одержал победу спустя {days} {days_str(days)}!')
 
 
-my_rect = Rect(2, 4)
-print(my_rect)
-print(f'Площадь: {my_rect()}')
+def days_str(days):
+    if 4 < days < 21:
+        res = 'дней'
+    elif str(days)[-1] == '1':
+        res = 'день'
+    else:
+        res = 'дня'
+    return res
+
+
+threads = []
+knights = [('Sir Lancelot', 10), ("Sir Galahad", 20), ]
+
+for knight in knights:
+    thread = Knight(*knight)
+    thread.start()
+    threads.append(thread)
+
+for thread in threads:
+    thread.join()
+
+print('Все битвы закончились!')
