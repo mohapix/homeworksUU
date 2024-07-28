@@ -23,7 +23,7 @@ class Knight(Thread):
 
 def days_str(days):
     days = days % 100
-    if 4 < days < 21 or days == 0:
+    if 5 <= days <= 20 or days == 0:
         return 'дней'
 
     days = days % 10
