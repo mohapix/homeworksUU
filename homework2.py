@@ -22,12 +22,17 @@ class Knight(Thread):
 
 
 def days_str(days):
-    if 4 < days < 21:
-        res = 'дней'
-    elif str(days)[-1] == '1':
+    days = days % 100
+    if 4 < days < 21 or days == 0:
+        return 'дней'
+
+    days = days % 10
+    if 2 <= days <= 4:
+        res = 'дня'
+    elif days == 1:
         res = 'день'
     else:
-        res = 'дня'
+        res = 'дней'
     return res
 
 
