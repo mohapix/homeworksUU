@@ -1,49 +1,45 @@
-from threading import Thread
-from time import sleep
-from datetime import datetime
+import requests
+import numpy as np
+import matplotlib.pyplot as plt
+from PIL import Image
+import pprint
 
 
-def wite_words(word_count, file_name):
-    with open(file_name, 'w+') as file:
-        n = 1
-        while n <= word_count:
-            file.write(f'Какое-то слово № {n}\n')
-            sleep(0.1)
-            n += 1
-    print(f'Завершилась запись в файл {file_name}')
+# Pillow
+image = Image.open('../Module10/images/img.jpg')
+image = image.resize((1280, 768))
+image = image.convert('L')
+image = image.rotate(180)
+image.show()
+image.close()
 
 
-time1_start = datetime.now()
+# matplotlib + numpy
+fig, graphx = plt.subplots(figsize=(10, 5.7), layout='constrained')
 
-wite_words(10, 'example1.txt')
-wite_words(30, 'example2.txt')
-wite_words(200, 'example3.txt')
-wite_words(100, 'example4.txt')
+for i in range(3):
+    x = np.random.randint(1, 10)
+    y = np.random.randint(1, 10)
+    x = np.linspace(0, x)
+    y = np.linspace(0, y)
+    graphx.plot(x, y, label=f'график {i + 1}')
 
-time1_end = datetime.now()
-print(f'Время выполнения без потоков: {time1_end - time1_start}')
+graphx.set_xlabel('ось X')
+graphx.set_ylabel('ось Y')
+graphx.set_title("Какой-то график")
+graphx.legend()
+plt.show()
 
-time2_start = datetime.now()
 
-args_1 = (10, 'example5.txt')
-args_2 = (30, 'example6.txt')
-args_3 = (200, 'example7.txt')
-args_4 = (100, 'example8.txt')
+# requests
+URL = 'https://api.github.com/user'
+TOKEN = '43095890_some_token_39208439'
+USER = 'my_user'
+PASSWORD = 'my_password'
 
-thr_1 = Thread(target=wite_words, args=args_1)
-thr_2 = Thread(target=wite_words, args=args_2)
-thr_3 = Thread(target=wite_words, args=args_3)
-thr_4 = Thread(target=wite_words, args=args_4)
+response = requests.get(URL, auth=(USER, PASSWORD), params={'access_token': TOKEN, })
+response_json = response.json()
 
-thr_1.start()
-thr_2.start()
-thr_3.start()
-thr_4.start()
-
-thr_1.join()
-thr_2.join()
-thr_3.join()
-thr_4.join()
-
-time2_end = datetime.now()
-print(f'Время выполнения с потоками: {time2_end - time2_start}')
+print(response.status_code)
+print(response.headers['content-type'])
+pprint.pprint(response_json)
