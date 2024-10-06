@@ -1,40 +1,54 @@
-import threading
+"""
+1. Создайте функцию introspection_info(obj), которая принимает объект obj.
+2. Используйте встроенные функции и методы интроспекции Python для получения информации о переданном объекте.
+3. Верните словарь или строки с данными об объекте, включающий следующую информацию:
+  - Тип объекта.
+  - Атрибуты объекта.
+  - Методы объекта.
+  - Модуль, к которому объект принадлежит.
+  - Другие интересные свойства объекта, учитывая его тип (по желанию).
+
+  {'type': 'int', 'attributes': [...], 'methods': ['__abs__', '__add__', ...], 'module': '__main__'}
+"""
+
+import inspect
+from pprint import pprint
 
 
-class BankAccount:
+class MyClass:
 
-    def __init__(self, balance):
-        self.balance = balance
-        self.lock = threading.Lock()
+    def __init__(self):
+        self.attr1 = 13
 
-    def deposit(self, amount):
-        with self.lock:
-            self.balance += amount
-            print(f'Deposited {amount}, new balance is {self.balance}')
-
-    def withdraw(self, amount):
-        with self.lock:
-            self.balance -= amount
-            print(f'Withdrew {amount}, new balance is {self.balance}')
+    def myclass_multi(self):
+        self.attr1 = self.attr1 * 2
 
 
-def deposit_task(account, amount):
-    for _ in range(5):
-        account.deposit(amount)
+myclass_object = MyClass()
 
 
-def withdraw_task(account, amount):
-    for _ in range(5):
-        account.withdraw(amount)
+def introspection_info(obj):
+    attrs_dict = {}
+    attrs_dict['type'] = str(type(obj)).split("'")[1]
+    attrs_list = []
+    attrs_methods = []
+    for attr_name in dir(obj):
+        attr = getattr(obj, attr_name)
+        if isinstance(attr, int) or isinstance(attr, str) or isinstance(attr, bool):
+            attrs_list.append(attr_name)
+        else:
+            attrs_methods.append(attr_name)
+    attrs_dict['attributes'] = attrs_list
+    attrs_dict['methods'] = attrs_methods
+    obj_module = str(inspect.getmodule(myclass_object)).split("'")
+    if obj_module[0] != "None":
+        attrs_dict['module'] = obj_module[1]
+    else:
+        attrs_dict['module'] = obj_module[0]
+    return attrs_dict
 
 
-account = BankAccount(1000)
-
-deposit_thread = threading.Thread(target=deposit_task, args=(account, 100))
-withdraw_thread = threading.Thread(target=withdraw_task, args=(account, 150))
-
-deposit_thread.start()
-withdraw_thread.start()
-
-deposit_thread.join()
-withdraw_thread.join()
+number_info = introspection_info(42)
+pprint(number_info)
+myclass_info = introspection_info(myclass_object)
+pprint(myclass_info)
